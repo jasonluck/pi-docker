@@ -29,3 +29,9 @@ sudo cp ./daemon.json /etc/docker/daemon.json
 sudo chmod 644 /etc/docker/daemon.json
 
 # Enable remote API for the local network
+sudo mkdir /etc/systemd/system/docker.service.d
+sudo cp ./override.conf /etc/systemd/system/docker.service.d/override.conf
+
+# Restart Docker service
+sudo systemctl daemon-reload
+sudo systemctl restart docker.service

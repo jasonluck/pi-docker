@@ -1,16 +1,53 @@
 version: '3'
 
 services:
-  reverse-proxy:
-    # The official v2 Traefik docker image
-    image: traefik:v2.10
-    # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
     ports:
-      # The HTTP port
-      - "80:80"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
+      - 80:80
+      - 443:443
+    secrets:
+      - "cf_api_email"
+      - "cf_dns_api_token"
+    environment:
+      - TRAEFIK_CERTIFICATESRESOLVERS_CF_ACME_EMAIL_FILE=/var/run/secrets/cf_api_email
+      - CF_API_EMAIL_FILE=/var/run/secrets/cf_api_email
+      - CF_DNS_API_TOKEN_FILE=/var/run/secrets/cf_dns_api_token
+      # - CF_API_KEY=YOUR_API_KEY
+      # be sure to use the correct one depending on if you are using a token or key
     volumes:
-      # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik.yml:/etc/traefik/traefik.yml:ro
+      - /volumes/traefik/acme.json:/acme.json
+      - config.yml:/config.yml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.local.fatinc.org`)"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.local.fatinc.org`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=local.fatinc.org"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.fatinc.org"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
+networks:
+  proxy:
+    external: true
+
+secrets:
+  cf_api_email:
+    file: ./cf_api_email.secret
+  cf_dns_api_token:
+    file: ./cf_dns_api_token.secret

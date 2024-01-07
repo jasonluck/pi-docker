@@ -19,25 +19,24 @@ services:
       - TRAEFIK_CERTIFICATESRESOLVERS_CF_ACME_EMAIL_FILE=/var/run/secrets/cf_api_email
       - CF_API_EMAIL_FILE=/var/run/secrets/cf_api_email
       - CF_DNS_API_TOKEN_FILE=/var/run/secrets/cf_dns_api_token
-      # - CF_API_KEY=YOUR_API_KEY
-      # be sure to use the correct one depending on if you are using a token or key
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik.yml:/etc/traefik/traefik.yml:ro
-      - /volumes/traefik/acme.json:/acme.json
-      - config.yml:/config.yml:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./acme.json:/acme.json
+      - ./config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.local.fatinc.org`)"
+      #- "traefik.http.routers.traefik.rule=Host(`localhost`)"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
       - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.local.fatinc.org`)"
-      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      #- "traefik.http.routers.traefik-secure.rule=Host(`localhost`)"
       - "traefik.http.routers.traefik-secure.tls=true"
-      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cf"
       - "traefik.http.routers.traefik-secure.tls.domains[0].main=local.fatinc.org"
       - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.fatinc.org"
       - "traefik.http.routers.traefik-secure.service=api@internal"
@@ -48,6 +47,6 @@ networks:
 
 secrets:
   cf_api_email:
-    file: ./cf_api_email.secret
+    file: ./cf-dns-api-email.secret
   cf_dns_api_token:
-    file: ./cf_dns_api_token.secret
+    file: ./cf-dns-api-token.secret

@@ -40,6 +40,12 @@ services:
       - "traefik.http.routers.traefik-secure.tls.domains[0].main=local.fatinc.org"
       - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.fatinc.org"
       - "traefik.http.routers.traefik-secure.service=api@internal"
+      - "traefik.tls.stores.default.defaultgeneratedcert.resolver=cf"
+      - "traefik.tls.stores.default.defaultgeneratedcert.domain.main=local.fatinc.org"
+      - "traefik.tls.stores.default.defaultgeneratedcert.domain.sans=*.local.fatinc.org"
+
+
+
 
 networks:
   proxy:

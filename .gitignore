@@ -1,2 +1,5 @@
 **/*.secret
 traefik/acme.json
+
+#PiHole
+pihole/etc-*

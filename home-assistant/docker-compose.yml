@@ -10,6 +10,8 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
+    networks:
+      - proxy
 
     labels:
       - "traefik.enable=true"

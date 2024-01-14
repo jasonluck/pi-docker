@@ -22,6 +22,11 @@ services:
       WEBTHEME: default-dark
       WEBPASSWORD_FILE: /var/run/secrets/webpassword
       WEB_PORT: 8053
+      # DHCP Settings
+      DHCP_ACTIVE: true
+      DHCP_START: 192.168.1.10
+      DHCP_END: 192.168.1.230
+      DHCP_ROUTER: 192.168.1.1
     # Volumes store your data between container upgrades
     volumes:
       - './etc-pihole:/etc/pihole'

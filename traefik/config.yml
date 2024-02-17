@@ -17,7 +17,7 @@ http:
       # This relies on Homeassistant using http. No certs are needed in the Homeassistant config.
       entryPoints:
         - "https"
-      rule: "Host(`homeassistant.local.fatinc.org`)"
+      rule: "Host(`home-assistant.local.fatinc.org`)"
       middlewares:
         - default-headers
         - https-redirectscheme

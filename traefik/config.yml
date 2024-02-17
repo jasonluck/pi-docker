@@ -29,7 +29,7 @@ http:
     pihole:
       loadBalancer:
         servers:
-          - url: "http://192.168.1.233:8153"
+          - url: "http://192.168.1.233:8053"
         passHostHeader: true
     homeassistant:
       loadBalancer:

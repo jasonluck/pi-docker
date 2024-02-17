@@ -6,3 +6,6 @@ pihole/etc-*
 
 #Home Assistant
 home-assistant/config
+
+#Heimdall
+heimdall/config

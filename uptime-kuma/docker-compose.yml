@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.uptimekuma.entrypoints=https"
       - "traefik.http.routers.uptimekuma.rule=Host(`status.local.fatinc.org`)"
       - "traefik.http.routers.uptimekuma.tls=true"
-      - "traefik.http.routers.uptimekuma.service=uptime-kuma"
+      - "traefik.http.routers.uptimekuma.service=uptimekuma"
       - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
       - "traefik.docker.network=proxy"
 

@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma:latest
+    ports:
+    # WebUI
+      - "3001:3001/tcp"
+    # Volumes store your data between container upgrades
+    volumes:
+      - './data:/app/data'
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptimekuma.entrypoints=https"
+      - "traefik.http.routers.uptimekuma.rule=Host(`status.local.fatinc.org`)"
+      - "traefik.http.routers.uptimekuma.tls=true"
+      - "traefik.http.routers.uptimekuma.service=uptime-kuma"
+      - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
+      - "traefik.docker.network=proxy"
+
+networks:
+  proxy:
+    - external: true  

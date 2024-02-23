@@ -10,7 +10,7 @@ services:
     # Volumes store your data between container upgrades
     volumes:
       # Mount docker socket so we can monitor containers
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       - './data:/app/data'
     restart: unless-stopped
     networks:

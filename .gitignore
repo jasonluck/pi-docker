@@ -7,5 +7,5 @@ pihole/etc-*
 #Home Assistant
 home-assistant/config
 
-#Heimdall
-heimdall/config
+#Uptime Kume
+uptime-kuma/data

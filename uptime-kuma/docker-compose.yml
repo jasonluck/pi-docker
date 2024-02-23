@@ -9,6 +9,8 @@ services:
       - "3001:3001/tcp"
     # Volumes store your data between container upgrades
     volumes:
+      # Mount docker socket so we can monitor containers
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - './data:/app/data'
     restart: unless-stopped
     networks:

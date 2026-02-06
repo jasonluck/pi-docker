@@ -54,3 +54,7 @@ services:
 networks:
   proxy:
     external: true  
+
+secrets:
+  session-key:
+    file: ./session-key.secret
